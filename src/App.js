@@ -1,44 +1,18 @@
 import { useState } from 'react';
-import { StyleSheet, View, Button, TextInput } from 'react-native';
+import { View, Button, TextInput } from 'react-native';
 
 import Make_text from './text.js';
+import NFform from './reuse/components.js'
 
 import tempres from './temporary_server_responses.js';
+
+import { styles, formStyles } from './reuse/styles.js';
 
 const page_e = {
   LANDING_LOGIN: 0,
   LANDING_REGISTER: 1,
   STARTING: 2,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-});
-
-const formStyles = StyleSheet.create({
-  form_border: {
-    borderWidth: 2,
-    borderColor: 'blue',
-  },
-  input_border: {
-    borderWidth: 1,
-    borderColor: 'red',
-  },
-  form_instruction_text: {
-    fontSize: 10,
-    textAlign: 'left',
-  },
-});
-
-/**
- *
- * HOW TO GENERATE COMPONENTS?
- *  SAY INVENTORY -> HOW TO GENERATE COMPONENTS BASED ON ITEMS
- *  SAY REGISTER -> SHOW TEXT COMPONENT IF WRONG EMAIL OR PW
- */
 
 function App() {
   const [SELECTEDPAGE, SET_SELECTEDPAGE] = useState(page_e.LANDING_REGISTER);
@@ -77,40 +51,60 @@ function App() {
 
   switch (SELECTEDPAGE) {
     case page_e.LANDING_LOGIN: {
+      const elements = [
+        {'type': 'email', 'name': 'email', 'instruction': 'ENTER YOUR EMAIL'},
+        {'type': 'password', 'name': 'password', 'instruction': 'ENTER YOUR PASSWORD'}
+      ];
+      const callbacks = {
+        on_success: () => {},
+        on_return: () => {}
+      };
+
       return (
         <View style={styles.container}>
-          <View style={formStyles.form_border}>
-            <Make_text
-              args={formStyles.form_instruction_text}
-              string={'EMAIL:'}
-            />
-            <TextInput
-              style={formStyles.input_border}
-              onChangeText={text => CHANGE_EMAILTEXT(text)}
-              value={EMAIL_TEXT}
-              textContentType="email"
-              autoComplete="email"
-            />
-            <Make_text
-              args={formStyles.form_instruction_text}
-              string={'PASSWORD:'}
-            />
-            <TextInput
-              style={formStyles.input_border}
-              onChangeText={text => CHANGE_PASSWORDTEXT(text)}
-              value={PASSWORD_TEXT}
-              textContentType="password"
-              autoComplete="current-password"
-              secureTextEntry
-            />
-            <Button title={'SUBMIT'} onPress={() => check_login_data()} />
-          </View>
-          <Button
-            title={'REGISTER'}
-            onPress={() => SET_SELECTEDPAGE(page_e.LANDING_REGISTER)}
+          <NFform 
+            callbacks={callbacks}
+            elements={elements}
           />
         </View>
-      );
+      )
+
+
+
+      // return (
+      //   <View style={styles.container}>
+      //     <View style={formStyles.form_border}>
+      //       <Make_text
+      //         args={formStyles.form_instruction_text}
+      //         string={'EMAIL:'}
+      //       />
+      //       <TextInput
+      //         style={formStyles.input_border}
+      //         onChangeText={text => CHANGE_EMAILTEXT(text)}
+      //         value={EMAIL_TEXT}
+      //         textContentType="email"
+      //         autoComplete="email"
+      //       />
+      //       <Make_text
+      //         args={formStyles.form_instruction_text}
+      //         string={'PASSWORD:'}
+      //       />
+      //       <TextInput
+      //         style={formStyles.input_border}
+      //         onChangeText={text => CHANGE_PASSWORDTEXT(text)}
+      //         value={PASSWORD_TEXT}
+      //         textContentType="password"
+      //         autoComplete="current-password"
+      //         secureTextEntry
+      //       />
+      //       <Button title={'SUBMIT'} onPress={() => check_login_data()} />
+      //     </View>
+      //     <Button
+      //       title={'REGISTER'}
+      //       onPress={() => SET_SELECTEDPAGE(page_e.LANDING_REGISTER)}
+      //     />
+      //   </View>
+      // );
     }
     case page_e.LANDING_REGISTER: {
       return (
