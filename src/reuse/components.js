@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
 import { formStyles, navigationStyles } from './styles';
+
+const SERVERIP = 'ws://localhost'
+const PORT = 8080
 
 /**
  * callbacks {}
@@ -13,6 +16,31 @@ import { formStyles, navigationStyles } from './styles';
  *  - instruction (text field instruction string)
  */
 const NFform = ({ callbacks, elements }) => {
+
+  const ws = useRef(null);
+  useEffect(() => {
+    ws.current = new WebSocket(`${SERVERIP}:${PORT}`);
+
+    ws.current.onopen = () => {
+      ws.current.send('Hallo vom Handy!');
+    };
+
+    ws.current.onmessage = e => {
+      console.log('Server sagt:', e.data);
+    };
+
+    ws.current.onclose = () => {
+      console.log('Verbindung geschlossen');
+    };
+
+    ws.current.onerror = e => {
+      console.log('Fehler:', e.message);
+    };
+
+    return () => {
+      ws.current && ws.current.close();
+    };
+  }, []);
 
   let waiting_for_response = false;
 
@@ -40,7 +68,8 @@ const NFform = ({ callbacks, elements }) => {
   
   function on_submit() {
     waiting_for_response = true;
-
+    console.log("SENDING");
+    ws.send("KEKW");
     /**
      * TODO server requests
      *      validity checks
