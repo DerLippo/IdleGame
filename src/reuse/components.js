@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
 import { formStyles, navigationStyles } from './styles';
 
-const SERVERIP = 'ws://localhost'
-const PORT = 8080
+const SERVERIP = 'ws://85.214.137.22'
+const PORT = 4000
 
 /**
  * callbacks {}
