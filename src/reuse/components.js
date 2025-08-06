@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
 import { formStyles, navigationStyles } from './styles';
 
-const SERVERIP = 'ws://85.214.137.22'
-const PORT = 4000
+const SERVERIP = 'ws://85.214.137.22';
+const PORT = 4000;
 
 /**
  * callbacks {}
@@ -16,31 +16,39 @@ const PORT = 4000
  *  - instruction (text field instruction string)
  */
 const NFform = ({ callbacks, elements }) => {
+  const [connected, setConnected] = useState(false);
+  const [alt, setAlt] = useState(false); // variable for while loop
 
   const ws = useRef(null);
   useEffect(() => {
     ws.current = new WebSocket(`${SERVERIP}:${PORT}`);
 
     ws.current.onopen = () => {
-      ws.current.send('Hallo vom Handy!');
+      setConnected(true);
     };
 
     ws.current.onmessage = e => {
-      console.log('Server sagt:', e.data);
+      const msg = e.data;
+      const string = msg.toString();
+      const obj = JSON.parse(string);
+      if (obj.success) callbacks.on_success();
     };
 
     ws.current.onclose = () => {
-      console.log('Verbindung geschlossen');
+      setConnected(false);
+      setTimeout(() => setAlt(!alt), 5000);
     };
 
     ws.current.onerror = e => {
-      console.log('Fehler:', e.message);
+      setConnected(false);
+      console.log('ERROR');
+      setTimeout(() => setAlt(!alt), 5000);
     };
 
     return () => {
       ws.current && ws.current.close();
     };
-  }, []);
+  }, [alt]);
 
   let waiting_for_response = false;
 
@@ -65,20 +73,15 @@ const NFform = ({ callbacks, elements }) => {
       },
     }));
   }
-  
-  function on_submit() {
-    waiting_for_response = true;
-    console.log("SENDING");
-    ws.send("KEKW");
-    /**
-     * TODO server requests
-     *      validity checks
-     */
-    throw new Error('on_submit not implemented');
-  }
 
+  function on_submit() {
+    if (!connected) return;
+    waiting_for_response = true;
+    ws.current.send(JSON.stringify(form_data));
+  }
+  4;
   function on_return() {
-    if(waiting_for_response) return;
+    if (waiting_for_response) return;
     set_form_data({});
     callbacks.on_return();
   }
@@ -100,7 +103,11 @@ const NFform = ({ callbacks, elements }) => {
         </View>
       ))}
       <Button title={'SUBMIT'} onPress={() => on_submit()} />
-      <Button style={navigationStyles.return_button} title={'RETURN'} onPress={() => on_return()} />
+      <Button
+        style={navigationStyles.return_button}
+        title={'RETURN'}
+        onPress={() => on_return()}
+      />
     </View>
   );
 };

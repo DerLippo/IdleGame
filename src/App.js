@@ -61,7 +61,9 @@ function App() {
       ];
 
       const callbacks = {
-        on_success: () => {},
+        on_success: () => {
+          console.log('IN ON SUCCESS');
+        },
         on_return: () => {},
       };
 
