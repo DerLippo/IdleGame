@@ -1,8 +1,21 @@
 import { useState } from 'react';
 import { View, Button, TextInput, Text } from 'react-native';
-import { formStyles } from './styles';
+import { formStyles, navigationStyles } from './styles';
 
+/**
+ * callbacks {}
+ *  - on_success() (called after log-in validation with server)
+ *  - on_return() (called after user voluntarily returns and state is cleared)
+ *
+ * elements [{}]
+ *  - name (placeholder for input field)
+ *  - type (password | email ...)
+ *  - instruction (text field instruction string)
+ */
 const NFform = ({ callbacks, elements }) => {
+
+  let waiting_for_response = false;
+
   const [form_data, set_form_data] = useState(() => {
     const init_state = {};
     elements.forEach(element => {
@@ -14,6 +27,7 @@ const NFform = ({ callbacks, elements }) => {
     });
     return init_state;
   });
+
   function on_input(field, string) {
     set_form_data(prev => ({
       ...prev,
@@ -23,13 +37,23 @@ const NFform = ({ callbacks, elements }) => {
       },
     }));
   }
+  
   function on_submit() {
+    waiting_for_response = true;
+
     /**
      * TODO server requests
      *      validity checks
      */
     throw new Error('on_submit not implemented');
   }
+
+  function on_return() {
+    if(waiting_for_response) return;
+    set_form_data({});
+    callbacks.on_return();
+  }
+
   return (
     <View style={formStyles.form_border}>
       {elements.map((elem, index) => (
@@ -47,6 +71,7 @@ const NFform = ({ callbacks, elements }) => {
         </View>
       ))}
       <Button title={'SUBMIT'} onPress={() => on_submit()} />
+      <Button style={navigationStyles.return_button} title={'RETURN'} onPress={() => on_return()} />
     </View>
   );
 };

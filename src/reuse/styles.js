@@ -14,7 +14,7 @@ const formStyles = StyleSheet.create({
   },
   input_border: {
     borderWidth: 1,
-    borderColor: 'red',
+    borderColor: 'orange',
   },
   form_instruction_text: {
     fontSize: 10,
@@ -22,4 +22,11 @@ const formStyles = StyleSheet.create({
   },
 });
 
-export { styles, formStyles };
+const navigationStyles = StyleSheet.create({
+  return_button: {
+    borderWidth: 1,
+    borderColor: 'red'
+  }
+})
+
+export { styles, formStyles, navigationStyles };

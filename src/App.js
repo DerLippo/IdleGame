@@ -6,7 +6,7 @@ import { NFform } from './reuse/components.js';
 
 import tempres from './temporary_server_responses.js';
 
-import { styles, formStyles } from './reuse/styles.js';
+import { styles } from './reuse/styles.js';
 
 const page_e = {
   LANDING_LOGIN: 0,
