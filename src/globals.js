@@ -1,0 +1,10 @@
+const gl = {
+  DEBUG: true,
+  SERVERIP: 'ws://85.214.137.22',
+  PORT: 4000,
+  ATTEMPT_RECONNECT: true,
+  RECONNECT_INTERVAL_MS: 5000,
+  EVENT_BUFFER_CLEAR_INTERVAL: 10000,
+};
+
+export default gl;
