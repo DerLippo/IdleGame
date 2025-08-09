@@ -1,4 +1,4 @@
-const gl = {
+export const gl = {
   DEBUG: true,
   SERVERIP: 'ws://85.214.137.22',
   PORT: 4000,
@@ -7,4 +7,8 @@ const gl = {
   EVENT_BUFFER_CLEAR_INTERVAL: 10000,
 };
 
-export default gl;
+export const page_e = {
+  LANDING_LOGIN: 0,
+  LANDING_REGISTER: 1,
+  STARTING: 2,
+};

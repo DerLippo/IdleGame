@@ -1,8 +1,8 @@
-import gl from './globals.js'
 
 export const NFmessagetypes_e = {
   LOGIN: 0,
-  REGISTER: 1
+  REGISTER: 1,
+  SENDMESSAGE: 2,
 };
 
 export class NFlistener_impl  {
@@ -61,7 +61,6 @@ export class NFmessagedriver_impl {
 
   add_listener(listener) {
     if(listener.type() === null || listener.type() === undefined) {
-      if(gl.DEBUG) console.log("INVALID LISTENER: NULL TYPE");
       return;
     }
 
